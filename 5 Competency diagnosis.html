@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5급 승진자 역량 자가진단</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<style>
+:root {
+  --navy: #0f2137;
+  --deep-blue: #1a3a5c;
+  --mid-blue: #2968a3;
+  --accent-blue: #3d8bd4;
+  --light-blue: #d0e4f7;
+  --ice-blue: #eaf2fb;
+  --warm-orange: #e07a2f;
+  --warm-orange-light: #fff3e6;
+  --green: #2a7d4f;
+  --green-light: #e6f5ed;
+  --red-soft: #d9534f;
+  --text-dark: #1a1d23;
+  --text-mid: #4a5568;
+  --text-light: #8895a7;
+  --bg: #f4f6f9;
+  --card-bg: #ffffff;
+  --border: #dce3eb;
+  --shadow: 0 2px 16px rgba(15,33,55,0.07);
+  --shadow-lg: 0 8px 40px rgba(15,33,55,0.12);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Hero Header ── */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--deep-blue) 40%, var(--mid-blue) 100%);
+  padding: 56px 24px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60%; left: -20%;
+  width: 140%; height: 200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(61,139,212,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--warm-orange), var(--accent-blue), var(--green));
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 6px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  backdrop-filter: blur(4px);
+}
+.hero h1 {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.hero p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 300;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Navigation ── */
+.tab-nav {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 24px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.tab-btn {
+  padding: 10px 24px;
+  border: none;
+  background: transparent;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-light);
+  cursor: pointer;
+  border-radius: 100px;
+  transition: all 0.25s ease;
+  position: relative;
+}
+.tab-btn:hover { color: var(--mid-blue); background: var(--ice-blue); }
+.tab-btn.active {
+  color: #fff;
+  background: var(--mid-blue);
+  box-shadow: 0 2px 12px rgba(41,104,163,0.3);
+}
+.tab-btn .badge {
+  display: inline-block;
+  background: var(--warm-orange);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 100px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ── Sections ── */
+.section { display: none; max-width: 960px; margin: 0 auto; padding: 32px 20px 80px; }
+.section.active { display: block; animation: fadeUp 0.4s ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Info Form ── */
+.info-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.info-card h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.info-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.info-field input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: var(--text-dark);
+  transition: border-color 0.2s;
+  background: var(--bg);
+}
+.info-field input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(61,139,212,0.1);
+}
+
+/* ── Scale Legend ── */
+.scale-legend {
+  background: linear-gradient(135deg, var(--ice-blue), #fff);
+  border: 1px solid var(--light-blue);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 28px;
+}
+.scale-legend h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mid-blue);
+  margin-bottom: 14px;
+}
+.scale-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+.scale-item {
+  font-size: 13px;
+  color: var(--text-mid);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.scale-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.scale-dot.s1 { background: #d9534f; }
+.scale-dot.s2 { background: #e87d3e; }
+.scale-dot.s3 { background: #eaac30; }
+.scale-dot.s4 { background: #5bb565; }
+.scale-dot.s5 { background: #2a7d4f; }
+
+/* ── Progress Bar ── */
+.progress-wrap {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px 28px;
+  box-shadow: var(--shadow);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.progress-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  white-space: nowrap;
+}
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--green));
+  border-radius: 100px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+.progress-pct {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mid-blue);
+  min-width: 45px;
+  text-align: right;
+}
+
+/* ── Competency Card ── */
+.comp-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+.comp-card:hover { box-shadow: var(--shadow-lg); }
+.comp-header {
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.comp-header:hover { background: var(--ice-blue); }
+.comp-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+}
+.comp-title-wrap { flex: 1; }
+.comp-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.comp-definition {
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-top: 3px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.comp-subs {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+.comp-score-badge {
+  background: var(--ice-blue);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mid-blue);
+  min-width: 70px;
+  text-align: center;
+}
+.comp-toggle {
+  font-size: 20px;
+  color: var(--text-light);
+  transition: transform 0.3s;
+}
+.comp-card.open .comp-toggle { transform: rotate(180deg); }
+
+.comp-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.comp-card.open .comp-body { max-height: 2000px; }
+
+.sub-section {
+  padding: 0 28px;
+  margin-bottom: 20px;
+}
+.sub-label {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mid-blue);
+  background: var(--ice-blue);
+  padding: 4px 14px;
+  border-radius: 100px;
+  margin-bottom: 4px;
+  margin-top: 8px;
+}
+.sub-desc {
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-bottom: 12px;
+  padding-left: 14px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.indicator-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.indicator-row:last-child { border-bottom: none; }
+.indicator-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-light);
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.indicator-text {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+.rating-group {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.rating-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rating-btn:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  transform: scale(1.1);
+}
+.rating-btn.selected {
+  color: #fff;
+  border-color: transparent;
+  transform: scale(1.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.rating-btn.selected[data-val="1"] { background: #d9534f; }
+.rating-btn.selected[data-val="2"] { background: #e87d3e; }
+.rating-btn.selected[data-val="3"] { background: #eaac30; }
+.rating-btn.selected[data-val="4"] { background: #5bb565; }
+.rating-btn.selected[data-val="5"] { background: #2a7d4f; }
+
+.comp-footer {
+  padding: 16px 28px 24px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Results Section ── */
+.result-hero {
+  text-align: center;
+  padding: 40px 28px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.result-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--warm-orange), var(--accent-blue), var(--green));
+}
+.result-overall-score {
+  font-size: 64px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+}
+.result-overall-label {
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 500;
+  margin-top: 4px;
+}
+.result-level {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 24px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ── Radar Chart ── */
+.chart-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  margin-bottom: 28px;
+  text-align: center;
+}
+.chart-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 24px;
+}
+#radarCanvas {
+  max-width: 420px;
+  margin: 0 auto;
+  display: block;
+}
+
+/* ── Result Table ── */
+.result-table-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.result-table-card h3 {
+  padding: 20px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  border-bottom: 1px solid var(--border);
+}
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.result-table th {
+  background: var(--navy);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 12px 14px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.result-table td {
+  padding: 14px;
+  font-size: 13px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.result-table tr:nth-child(even) { background: var(--ice-blue); }
+.result-table .comp-name-cell {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-dark);
+  padding-left: 20px;
+}
+.result-table .avg-cell {
+  font-weight: 800;
+  font-size: 16px;
+}
+.level-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.level-badge.lv5 { background: #e6f5ed; color: #1a6b3c; }
+.level-badge.lv4 { background: #e6f5ed; color: #2a7d4f; }
+.level-badge.lv3 { background: #fef9e7; color: #9a7b1a; }
+.level-badge.lv2 { background: #fef0e6; color: #c45d1a; }
+.level-badge.lv1 { background: #fde8e8; color: #b33a3a; }
+
+.bar-cell { width: 140px; }
+.mini-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.6s ease;
+}
+
+/* ── Dev Plan ── */
+.dev-plan-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  margin-bottom: 28px;
+}
+.dev-plan-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 20px;
+}
+.dev-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: start;
+}
+.dev-row-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--navy);
+}
+.dev-label {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.dev-label.strength { background: var(--green-light); color: var(--green); }
+.dev-label.develop { background: var(--warm-orange-light); color: var(--warm-orange); }
+.dev-textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  color: var(--text-dark);
+  resize: vertical;
+  transition: border-color 0.2s;
+  background: var(--bg);
+}
+.dev-textarea:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  background: #fff;
+}
+
+/* ── Buttons ── */
+.btn-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-primary {
+  background: var(--mid-blue);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(41,104,163,0.3);
+}
+.btn-primary:hover { background: var(--navy); transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text-mid);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover { background: var(--light-blue); color: var(--mid-blue); }
+.btn-warn {
+  background: #fff3e6;
+  color: var(--warm-orange);
+  border: 1.5px solid var(--warm-orange);
+}
+.btn-warn:hover { background: var(--warm-orange); color: #fff; }
+
+/* ── Print ── */
+@media print {
+  .tab-nav, .btn-row, .hero-badge, .progress-wrap { display: none !important; }
+  .section { display: block !important; page-break-inside: avoid; }
+  .comp-body { max-height: none !important; }
+  body { background: #fff; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .scale-items { flex-direction: column; }
+  .indicator-row { flex-direction: column; gap: 10px; }
+  .rating-group { align-self: flex-end; }
+  .dev-row { grid-template-columns: 1fr; }
+  .result-table { font-size: 12px; }
+  .result-table th, .result-table td { padding: 8px 6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">Development Center</div>
+  <h1>5급 승진자 역량 자가진단</h1>
+  <p>부산광역시 5급 직위에서 요구되는 6대 핵심역량의 현재 수준을 스스로 점검합니다</p>
+</div>
+
+<!-- Tab Navigation -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('intro')">📋 안내</button>
+  <button class="tab-btn" onclick="switchTab('assess')">✏️ 자가진단 <span class="badge" id="progressBadge">0%</span></button>
+  <button class="tab-btn" onclick="switchTab('result')">📊 결과요약</button>
+</nav>
+
+<!-- ====== Section 1: 안내 ====== -->
+<div class="section active" id="sec-intro">
+  <div class="info-card">
+    <h2>👤 인적사항</h2>
+    <div class="info-grid">
+      <div class="info-field">
+        <label>성명</label>
+        <input type="text" id="userName" placeholder="홍길동">
+      </div>
+      <div class="info-field">
+        <label>소속</label>
+        <input type="text" id="userDept" placeholder="부산시 ○○과">
+      </div>
+      <div class="info-field">
+        <label>직급</label>
+        <input type="text" id="userRank" value="6급" placeholder="6급">
+      </div>
+      <div class="info-field">
+        <label>작성일</label>
+        <input type="date" id="userDate">
+      </div>
+    </div>
+  </div>
+
+  <div class="scale-legend">
+    <h3>📐 평가 척도 안내</h3>
+    <div class="scale-items">
+      <div class="scale-item"><span class="scale-dot s1">1</span> 매우 미흡 — 해당 행동을 거의 보이지 않음</div>
+      <div class="scale-item"><span class="scale-dot s2">2</span> 미흡 — 간헐적 시도, 일관성 부족</div>
+      <div class="scale-item"><span class="scale-dot s3">3</span> 보통 — 보통 수준 수행, 상황별 편차</div>
+      <div class="scale-item"><span class="scale-dot s4">4</span> 우수 — 대부분 상황에서 안정적 수행</div>
+      <div class="scale-item"><span class="scale-dot s5">5</span> 매우 우수 — 탁월한 수행, 타인의 모범</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h2>📌 진단 안내사항</h2>
+    <p style="font-size:14px; color:var(--text-mid); line-height:2;">
+      ① 본 진단은 5급 직위에서 요구되는 <strong>6대 핵심역량</strong>에 대한 현재 수준을 스스로 점검하기 위한 도구입니다.<br>
+      ② 각 역량별 행동지표를 읽고, 현재 자신의 행동 수준에 가장 가까운 점수(<strong>1~5점</strong>)를 선택하십시오.<br>
+      ③ 본 진단의 결과는 외부에 공개되지 않으며, 오직 <strong>자신의 역량개발 계획 수립</strong>을 위해서만 활용됩니다.<br>
+      ④ 있는 그대로 솔직하게 응답할수록 더 효과적인 개발 계획을 수립할 수 있습니다.<br>
+      ⑤ 총 <strong>54개 문항</strong>(6역량 × 3하위요소 × 3행동지표)으로 구성되어 있습니다.
+    </p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="switchTab('assess')">자가진단 시작하기 →</button>
+  </div>
+</div>
+
+<!-- ====== Section 2: 자가진단 ====== -->
+<div class="section" id="sec-assess">
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <span class="progress-label">진행률</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-pct" id="progressPct">0%</span>
+  </div>
+
+  <div id="compContainer"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="switchTab('intro')">← 안내로 돌아가기</button>
+    <button class="btn btn-primary" onclick="showResults()">결과 확인하기 →</button>
+  </div>
+</div>
+
+<!-- ====== Section 3: 결과요약 ====== -->
+<div class="section" id="sec-result">
+  <div id="resultContent"></div>
+</div>
+
+<script>
+// ── Data ──
+const DATA = [
+  {
+    name: "현장문제 분석 및 해결",
+    definition: "현장의 문제를 발굴·분석하여 창의적이고 실행 가능한 해결방안을 도출하고 추진함",
+    color: "#2968a3",
+    subs: [
+      { name: "문제발굴", desc: "현장의 잠재적·표면적 문제를 선제적으로 인식하고 규명함", items: [
+        "담당 업무 분야의 현장에서 발생하는 핵심 문제를 정확히 파악하고 정의한다.",
+        "표면적 현상 이면의 근본 원인을 체계적으로 분석한다.",
+        "다양한 데이터와 현장 정보를 수집하여 문제의 심각성과 시급성을 판단한다."
+      ]},
+      { name: "해결책 제시", desc: "분석된 문제에 대해 실행 가능한 대안을 도출하고 제시함", items: [
+        "문제 해결을 위해 복수의 대안을 도출하고 각각의 장단점을 비교·분석한다.",
+        "실현가능성, 효과성, 비용 등을 고려하여 최적의 해결책을 선택한다.",
+        "해결책을 상급자 및 관계자에게 논리적으로 제안하고 설득한다."
+      ]},
+      { name: "실행", desc: "제시된 해결방안을 실행 가능한 전체적인 추진계획 및 세부 단계별 추진계획으로 구체화함", items: [
+        "수립된 해결책을 구체적인 실행계획으로 전환하고 추진한다.",
+        "실행 과정에서 발생하는 장애요인에 유연하게 대처한다.",
+        "실행 결과를 모니터링하고 필요 시 수정·보완 조치를 취한다."
+      ]}
+    ]
+  },
+  {
+    name: "시 산하 타 부서 조정통합",
+    definition: "타 부서와의 이해관계를 조율하고, 갈등을 조정하며 상호 이익이 되는 합의 도출을 주도함",
+    color: "#1a6b3c",
+    subs: [
+      { name: "이해관계자 협력", desc: "관련 부서 및 이해관계자의 입장과 요구를 파악하여 협력적 관계를 촉진함", items: [
+        "업무 추진 시 관련 부서 및 이해관계자를 사전에 파악하고 소통한다.",
+        "타 부서의 입장과 업무 맥락을 이해하려고 적극적으로 노력한다.",
+        "공동의 목표를 설정하고 이해관계자 간 협력 기반을 구축한다."
+      ]},
+      { name: "갈등조정", desc: "부서 간 이견과 갈등 요인을 분석하고 합리적 대안을 통해 조정함", items: [
+        "부서 간 이견이나 갈등 상황을 조기에 인식하고 개입한다.",
+        "양측의 입장을 경청하고 합리적인 절충안을 제시한다.",
+        "갈등 해결 과정에서 공정하고 객관적인 태도를 유지한다."
+      ]},
+      { name: "협상", desc: "상충하는 이해관계 속에서 상호 수용 가능한 합의를 이끌어냄", items: [
+        "상호 이익을 극대화하는 윈-윈(Win-Win) 방안을 모색한다.",
+        "명확한 근거와 논리를 바탕으로 설득력 있게 협상을 진행한다.",
+        "협상 결과를 문서화하고 합의사항의 이행을 관리한다."
+      ]}
+    ]
+  },
+  {
+    name: "혁신적 업무개선 및 촉진",
+    definition: "새로운 기술과 창의적 방법을 활용하여 업무절차를 개선하고 조직의 변화를 촉진해 나감",
+    color: "#e07a2f",
+    subs: [
+      { name: "변화관리", desc: "업무 개선에 따른 조직 내 저항을 예측하고 구성원의 수용과 적응을 이끌어 냄", items: [
+        "업무 환경의 변화 트렌드를 주시하고 변화 필요성을 인식한다.",
+        "변화에 대한 조직 구성원의 저항을 이해하고 적절히 관리한다.",
+        "변화 과정에서 구성원들의 참여와 동기부여를 이끌어낸다."
+      ]},
+      { name: "혁신적 사고", desc: "기존 업무 방식에 대한 고정관념을 탈피하고 창의적 개선 방안을 도출해 냄", items: [
+        "기존의 업무 방식에 대해 비판적으로 검토하고 개선점을 발굴한다.",
+        "타 분야의 우수 사례나 새로운 아이디어를 적극적으로 벤치마킹한다.",
+        "창의적인 대안을 제시하고 실험적 시도를 두려워하지 않는다."
+      ]},
+      { name: "기술적용", desc: "새로운 기술과 도구를 업무 현장에 적합하게 도입·활용함", items: [
+        "디지털 기술 등 새로운 기술의 업무 적용 가능성을 탐색한다.",
+        "기술 도입 시 업무 효율성 개선 효과를 분석하고 도입을 추진한다.",
+        "기술 변화에 대한 구성원의 적응을 지원한다."
+      ]}
+    ]
+  },
+  {
+    name: "팀조직 및 팀빌딩",
+    definition: "팀원의 역량을 파악하여 적절히 역할을 배분하고 팀의 결속과 협업을 이끌어 냄",
+    color: "#7c3aed",
+    subs: [
+      { name: "팀 구성", desc: "현안에 맞춰 팀원의 강점을 파악하고 적절한 역할과 책임을 배분함", items: [
+        "업무 목표 달성에 필요한 팀원의 역할과 역량을 파악한다.",
+        "팀원 개개인의 강점을 고려하여 적절한 역할을 배분한다.",
+        "팀 내 역할과 책임을 명확히 설정하고 공유한다."
+      ]},
+      { name: "팀빌딩 촉진", desc: "팀원 간 신뢰와 긍정적 관계를 형성하여 팀의 결속력과 사기를 높여 나감", items: [
+        "팀원 간 신뢰 관계를 형성하기 위해 적극적으로 노력한다.",
+        "팀의 공동 목표의식과 소속감을 높이는 활동을 추진한다.",
+        "팀원의 성장과 발전을 지원하고 코칭한다."
+      ]},
+      { name: "협업촉진", desc: "팀원 간 역할을 연계하고 공동 과제의 통합적 수행을 이끌어냄", items: [
+        "팀 내 원활한 정보 공유와 소통 체계를 구축한다.",
+        "팀원 간 협력적 업무 수행을 독려하고 시너지를 창출한다.",
+        "팀 갈등 발생 시 건설적으로 해결하는 분위기를 조성한다."
+      ]}
+    ]
+  },
+  {
+    name: "체계적 전략수립",
+    definition: "행정수요와 환경 변화를 분석하여 실행 가능한 전략을 수립하고 성과를 관리해 나감",
+    color: "#0891b2",
+    subs: [
+      { name: "전략적 사고", desc: "행정환경의 변화와 내·외부 여건을 체계적으로 분석하여 사업의 방향성을 도출함", items: [
+        "담당 분야의 중장기 환경 변화와 트렌드를 분석한다.",
+        "조직의 비전·목표와 담당 업무의 연계성을 명확히 이해한다.",
+        "업무 추진의 우선순위를 전략적 관점에서 설정한다."
+      ]},
+      { name: "전략수립", desc: "행정수요에 부합하는 사업 목표를 설정하고 실행 가능한 추진계획을 수립함", items: [
+        "구체적이고 측정 가능한 목표를 설정한다.",
+        "목표 달성을 위한 세부 실행전략과 로드맵을 수립한다.",
+        "가용 자원(인력, 예산, 시간)을 효과적으로 배분하는 계획을 세운다."
+      ]},
+      { name: "성과분석", desc: "전략 실행 결과를 체계적으로 측정·분석하여 개선점을 도출하고 환류함", items: [
+        "핵심성과지표(KPI)를 설정하고 성과를 주기적으로 측정한다.",
+        "성과 데이터를 분석하여 개선 과제를 도출한다.",
+        "성과 분석 결과를 차기 전략 수립에 환류(피드백)한다."
+      ]}
+    ]
+  },
+  {
+    name: "효과적 업무촉진",
+    definition: "팀원 간 원활한 소통과 협력을 이끌어내고, 적시에 피드백을 제공하여 업무 성과를 높여 나감",
+    color: "#be185d",
+    subs: [
+      { name: "소통촉진", desc: "팀원 간 원활한 의사소통 환경을 조성하고 정보 공유를 활성화함", items: [
+        "업무 관련 정보를 적시에 정확하게 전달한다.",
+        "상·하급자 및 유관부서와 열린 소통 채널을 유지한다.",
+        "회의나 보고 시 핵심 내용을 명확하고 간결하게 전달한다."
+      ]},
+      { name: "협력촉진", desc: "팀원의 자발적 참여와 상호 지원을 이끌어 협력적 업무 수행 분위기를 조성함", items: [
+        "업무 추진 시 관련 부서·기관과 적극적으로 협력한다.",
+        "협력 과정에서 상호 존중과 신뢰를 기반으로 관계를 구축한다.",
+        "공동 과제 수행 시 역할 분담과 일정을 체계적으로 관리한다."
+      ]},
+      { name: "피드백", desc: "팀원의 업무 수행 과정과 결과를 수시로 점검하여 구체적이고 건설적인 피드백을 제공함", items: [
+        "팀원과 동료에게 구체적이고 건설적인 피드백을 제공한다.",
+        "타인의 피드백을 수용적으로 경청하고 업무에 반영한다.",
+        "피드백을 통해 지속적인 업무 개선과 성장을 추구한다."
+      ]}
+    ]
+  }
+];
+
+const scores = {}; // key: "c{ci}_s{si}_i{ii}", value: 1-5
+let totalItems = 0;
+DATA.forEach((c, ci) => c.subs.forEach((s, si) => s.items.forEach((_, ii) => totalItems++)));
+
+// ── Firebase ──
+const firebaseConfig = {
+  apiKey: "AIzaSyDHEDhJfFLOTKkLrXEziU4nPyeEyrwZr5k",
+  authDomain: "competency-diagnosis.firebaseapp.com",
+  projectId: "competency-diagnosis",
+  storageBucket: "competency-diagnosis.firebasestorage.app",
+  messagingSenderId: "791730020043",
+  appId: "1:791730020043:web:8fd165266870ee022ac54e",
+  measurementId: "G-R4PGHLD543"
+};
+
+let firestoreDb = null;
+let hasSavedToFirebase = false;
+
+try {
+  const app = firebase.initializeApp(firebaseConfig);
+  firebase.analytics(app);
+  firestoreDb = firebase.firestore();
+} catch (error) {
+  console.error('Firebase 초기화 실패:', error);
+}
+
+// ── Set today's date ──
+document.getElementById('userDate').valueAsDate = new Date();
+
+// ── Tab switching ──
+function switchTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + tab).classList.add('active');
+  document.querySelectorAll('.tab-btn')[{intro:0, assess:1, result:2}[tab]].classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  if (tab === 'result') renderResults();
+}
+
+// ── Build assessment UI ──
+function buildAssessment() {
+  const container = document.getElementById('compContainer');
+  let globalIdx = 0;
+  
+  DATA.forEach((comp, ci) => {
+    const card = document.createElement('div');
+    card.className = 'comp-card' + (ci === 0 ? ' open' : '');
+    card.id = `comp-${ci}`;
+    
+    let subsHtml = '';
+    comp.subs.forEach((sub, si) => {
+      let itemsHtml = '';
+      sub.items.forEach((item, ii) => {
+        globalIdx++;
+        const key = `c${ci}_s${si}_i${ii}`;
+        itemsHtml += `
+          <div class="indicator-row">
+            <span class="indicator-num">${globalIdx}</span>
+            <span class="indicator-text">${item}</span>
+            <div class="rating-group">
+              ${[1,2,3,4,5].map(v => `<button class="rating-btn" data-key="${key}" data-val="${v}" onclick="rate('${key}',${v},this)">${v}</button>`).join('')}
+            </div>
+          </div>`;
+      });
+      subsHtml += `<div class="sub-section"><span class="sub-label">${sub.name}</span>${sub.desc ? `<div class="sub-desc">${sub.desc}</div>` : ''}${itemsHtml}</div>`;
+    });
+    
+    card.innerHTML = `
+      <div class="comp-header" onclick="toggleComp(${ci})">
+        <div class="comp-num" style="background:${comp.color}">${ci+1}</div>
+        <div class="comp-title-wrap">
+          <div class="comp-title">${comp.name}</div>
+          ${comp.definition ? `<div class="comp-definition">${comp.definition}</div>` : ''}
+          <div class="comp-subs">${comp.subs.map(s=>s.name).join(' · ')}</div>
+        </div>
+        <div class="comp-score-badge" id="compBadge-${ci}">— 점</div>
+        <div class="comp-toggle">▼</div>
+      </div>
+      <div class="comp-body">${subsHtml}</div>`;
+    
+    container.appendChild(card);
+  });
+}
+
+function toggleComp(ci) {
+  document.getElementById(`comp-${ci}`).classList.toggle('open');
+}
+
+function rate(key, val, btn) {
+  scores[key] = val;
+  btn.parentElement.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = Object.keys(scores).length;
+  const pct = Math.round(answered / totalItems * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressBadge').textContent = pct + '%';
+  
+  // Update each competency badge
+  DATA.forEach((comp, ci) => {
+    let sum = 0, cnt = 0;
+    comp.subs.forEach((sub, si) => {
+      sub.items.forEach((_, ii) => {
+        const key = `c${ci}_s${si}_i${ii}`;
+        if (scores[key]) { sum += scores[key]; cnt++; }
+      });
+    });
+    const badge = document.getElementById(`compBadge-${ci}`);
+    badge.textContent = cnt > 0 ? (sum/cnt).toFixed(1) + ' 점' : '— 점';
+  });
+}
+
+// ── Results ──
+function getLevel(avg) {
+  if (avg >= 4.5) return { text: '매우 우수', cls: 'lv5', color: '#1a6b3c' };
+  if (avg >= 3.5) return { text: '우수', cls: 'lv4', color: '#2a7d4f' };
+  if (avg >= 2.5) return { text: '보통', cls: 'lv3', color: '#9a7b1a' };
+  if (avg >= 1.5) return { text: '미흡', cls: 'lv2', color: '#c45d1a' };
+  return { text: '매우 미흡', cls: 'lv1', color: '#b33a3a' };
+}
+
+function barColor(avg) {
+  if (avg >= 4.5) return '#1a6b3c';
+  if (avg >= 3.5) return '#2a7d4f';
+  if (avg >= 2.5) return '#eaac30';
+  if (avg >= 1.5) return '#e87d3e';
+  return '#d9534f';
+}
+
+function showResults() {
+  if (Object.keys(scores).length < totalItems) {
+    if (!confirm(`아직 ${totalItems - Object.keys(scores).length}개 문항이 미응답입니다.\n현재까지의 결과를 확인하시겠습니까?`)) return;
+  }
+  hasSavedToFirebase = false;
+  switchTab('result');
+}
+
+function collectResultData() {
+  const results = [];
+  DATA.forEach((comp, ci) => {
+    const subAvgs = [];
+    comp.subs.forEach((sub, si) => {
+      let sum = 0, cnt = 0;
+      sub.items.forEach((_, ii) => {
+        const key = `c${ci}_s${si}_i${ii}`;
+        if (scores[key]) { sum += scores[key]; cnt++; }
+      });
+      subAvgs.push(cnt > 0 ? sum / cnt : 0);
+    });
+    const compAvg = subAvgs.filter(v=>v>0).length > 0 
+      ? subAvgs.filter(v=>v>0).reduce((a,b)=>a+b,0) / subAvgs.filter(v=>v>0).length : 0;
+    results.push({ name: comp.name, color: comp.color, subs: comp.subs.map((s,i)=>({name:s.name, avg:subAvgs[i]})), avg: compAvg });
+  });
+  
+  const overallAvg = results.filter(r=>r.avg>0).length > 0
+    ? results.filter(r=>r.avg>0).reduce((a,r)=>a+r.avg,0) / results.filter(r=>r.avg>0).length : 0;
+  const overallLevel = getLevel(overallAvg);
+
+  return { results, overallAvg, overallLevel };
+}
+
+async function saveResultToFirebase(resultData) {
+  if (!firestoreDb || hasSavedToFirebase) return;
+
+  const userName = (document.getElementById('userName').value || '').trim();
+  const userDept = (document.getElementById('userDept').value || '').trim();
+  const userRank = (document.getElementById('userRank').value || '').trim();
+  const userDate = (document.getElementById('userDate').value || '').trim();
+
+  const payload = {
+    user: {
+      name: userName || null,
+      dept: userDept || null,
+      rank: userRank || null,
+      date: userDate || null
+    },
+    overall: {
+      average: Number(resultData.overallAvg.toFixed(4)),
+      level: resultData.overallLevel.text
+    },
+    competencies: resultData.results.map(r => ({
+      name: r.name,
+      avg: Number(r.avg.toFixed(4)),
+      subs: r.subs.map(s => ({
+        name: s.name,
+        avg: Number(s.avg.toFixed(4))
+      }))
+    })),
+    scores: { ...scores },
+    answeredCount: Object.keys(scores).length,
+    totalItems,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    clientCreatedAt: new Date().toISOString()
+  };
+
+  try {
+    await firestoreDb.collection('diagnosisResults').add(payload);
+    hasSavedToFirebase = true;
+  } catch (error) {
+    console.error('Firestore 저장 실패:', error);
+  }
+}
+
+function renderResults() {
+  const resultData = collectResultData();
+  const results = resultData.results;
+  const overallAvg = resultData.overallAvg;
+  const overallLevel = resultData.overallLevel;
+  
+  const userName = document.getElementById('userName').value || '교육생';
+  
+  let html = '';
+  
+  // Hero
+  html += `
+    <div class="result-hero">
+      <p style="font-size:14px;color:var(--text-light);margin-bottom:4px;">${userName}님의 역량 자가진단 결과</p>
+      <div class="result-overall-score">${overallAvg > 0 ? overallAvg.toFixed(2) : '—'}</div>
+      <div class="result-overall-label">전체 역량 평균 (5점 만점)</div>
+      <div class="result-level level-badge ${overallLevel.cls}" style="font-size:16px;padding:8px 28px;margin-top:16px;">
+        ${overallLevel.text}
+      </div>
+    </div>`;
+  
+  // Radar Chart
+  html += `
+    <div class="chart-card">
+      <h3>🕸️ 역량 프로파일 (Radar Chart)</h3>
+      <canvas id="radarCanvas" width="420" height="420"></canvas>
+    </div>`;
+  
+  // Table
+  let rows = '';
+  results.forEach((r, i) => {
+    const lv = getLevel(r.avg);
+    rows += `<tr>
+      <td style="font-weight:700;color:${r.color}">${i+1}</td>
+      <td class="comp-name-cell">${r.name}</td>
+      ${r.subs.map(s => `<td>${s.avg > 0 ? s.avg.toFixed(1) : '—'}</td>`).join('')}
+      <td class="avg-cell" style="color:${r.color}">${r.avg > 0 ? r.avg.toFixed(2) : '—'}</td>
+      <td class="bar-cell"><div class="mini-bar"><div class="mini-bar-fill" style="width:${r.avg/5*100}%;background:${barColor(r.avg)}"></div></div></td>
+      <td><span class="level-badge ${lv.cls}">${lv.text}</span></td>
+    </tr>`;
+  });
+  
+  html += `
+    <div class="result-table-card">
+      <h3>📋 역량별 상세 결과</h3>
+      <div style="overflow-x:auto">
+        <table class="result-table">
+          <thead><tr>
+            <th>No.</th><th>역량</th><th>하위①</th><th>하위②</th><th>하위③</th><th>평균</th><th>수준</th><th>등급</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  
+  // Strengths & Development
+  const sorted = [...results].filter(r=>r.avg>0).sort((a,b)=>b.avg-a.avg);
+  const strengths = sorted.slice(0, 2);
+  const develops = sorted.slice(-2).reverse();
+  
+  html += `
+    <div class="dev-plan-card">
+      <h3>📝 역량개발 계획</h3>
+      <div style="margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--text-mid);">
+          진단 결과를 바탕으로 <strong style="color:var(--green)">강점 역량</strong>과 
+          <strong style="color:var(--warm-orange)">개발필요 역량</strong>을 확인하고 구체적인 개발 계획을 수립하세요.
+        </p>
+      </div>
+      
+      ${strengths.length > 0 ? `
+      <p style="font-size:13px;font-weight:700;color:var(--green);margin:16px 0 8px;">▲ 강점 역량 (상위 2개)</p>
+      ${strengths.map((s,i) => `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:10px 16px;background:var(--green-light);border-radius:8px;">
+          <span style="font-weight:800;color:var(--green);font-size:18px;">${i+1}</span>
+          <span style="font-weight:600;flex:1;">${s.name}</span>
+          <span style="font-weight:800;color:var(--green);font-size:16px;">${s.avg.toFixed(2)}점</span>
+        </div>
+      `).join('')}` : ''}
+      
+      ${develops.length > 0 ? `
+      <p style="font-size:13px;font-weight:700;color:var(--warm-orange);margin:20px 0 8px;">▼ 개발필요 역량 (하위 2개)</p>
+      ${develops.map((s,i) => `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:10px 16px;background:var(--warm-orange-light);border-radius:8px;">
+          <span style="font-weight:800;color:var(--warm-orange);font-size:18px;">${i+1}</span>
+          <span style="font-weight:600;flex:1;">${s.name}</span>
+          <span style="font-weight:800;color:var(--warm-orange);font-size:16px;">${s.avg.toFixed(2)}점</span>
+        </div>
+      `).join('')}` : ''}
+      
+      <div style="margin-top:24px;">
+        <p style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;">개발 계획 작성</p>
+        <div class="dev-row">
+          <div class="dev-row-header">구분</div>
+          <div class="dev-row-header">목표 수준</div>
+          <div class="dev-row-header">구체적 개발 방법</div>
+          <div class="dev-row-header">실행 기한</div>
+        </div>
+        ${[
+          {label:'개발역량 ①', cls:'develop'},
+          {label:'개발역량 ②', cls:'develop'},
+        ].map(d => `
+          <div class="dev-row">
+            <div class="dev-label ${d.cls}">${d.label}</div>
+            <textarea class="dev-textarea" placeholder="예: 4.0점"></textarea>
+            <textarea class="dev-textarea" placeholder="예: 관련 교육 이수, 프로젝트 참여 등"></textarea>
+            <textarea class="dev-textarea" placeholder="예: 2026년 6월"></textarea>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  
+  html += `
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="switchTab('assess')">← 진단으로 돌아가기</button>
+      <button class="btn btn-primary" onclick="window.print()">🖨️ 인쇄하기</button>
+      <button class="btn btn-warn" onclick="resetAll()">↺ 초기화</button>
+    </div>`;
+  
+  document.getElementById('resultContent').innerHTML = html;
+  
+  // Draw radar
+  setTimeout(() => drawRadar(results), 100);
+  saveResultToFirebase(resultData);
+}
+
+// ── Radar Chart (Pure Canvas) ──
+function drawRadar(results) {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const size = 420;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  ctx.scale(dpr, dpr);
+  
+  const cx = size / 2, cy = size / 2;
+  const maxR = 160;
+  const n = results.length;
+  const angleStep = (Math.PI * 2) / n;
+  const startAngle = -Math.PI / 2;
+  
+  // Grid
+  for (let level = 1; level <= 5; level++) {
+    const r = maxR * level / 5;
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const angle = startAngle + angleStep * (i % n);
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = level === 5 ? '#b0bec5' : '#dce3eb';
+    ctx.lineWidth = level === 5 ? 1.5 : 0.8;
+    ctx.stroke();
+    
+    // Level labels
+    if (level > 0) {
+      ctx.fillStyle = '#90a4ae';
+      ctx.font = '10px "Noto Sans KR"';
+      ctx.textAlign = 'center';
+      ctx.fillText(level, cx + 8, cy - r + 12);
+    }
+  }
+  
+  // Axis lines and labels
+  results.forEach((r, i) => {
+    const angle = startAngle + angleStep * i;
+    const x = cx + maxR * Math.cos(angle);
+    const y = cy + maxR * Math.sin(angle);
+    
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = '#dce3eb';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+    
+    // Labels
+    const lx = cx + (maxR + 30) * Math.cos(angle);
+    const ly = cy + (maxR + 30) * Math.sin(angle);
+    ctx.fillStyle = r.color;
+    ctx.font = 'bold 12px "Noto Sans KR"';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // Split long names
+    const parts = r.name.split(' ');
+    if (parts.length > 2) {
+      const mid = Math.ceil(parts.length / 2);
+      ctx.fillText(parts.slice(0, mid).join(' '), lx, ly - 8);
+      ctx.fillText(parts.slice(mid).join(' '), lx, ly + 8);
+    } else {
+      ctx.fillText(r.name, lx, ly);
+    }
+  });
+  
+  // Data polygon (filled)
+  ctx.beginPath();
+  results.forEach((r, i) => {
+    const angle = startAngle + angleStep * i;
+    const val = r.avg > 0 ? r.avg : 0;
+    const x = cx + maxR * (val / 5) * Math.cos(angle);
+    const y = cy + maxR * (val / 5) * Math.sin(angle);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(41,104,163,0.15)';
+  ctx.fill();
+  ctx.strokeStyle = '#2968a3';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+  
+  // Data points
+  results.forEach((r, i) => {
+    const angle = startAngle + angleStep * i;
+    const val = r.avg > 0 ? r.avg : 0;
+    const x = cx + maxR * (val / 5) * Math.cos(angle);
+    const y = cy + maxR * (val / 5) * Math.sin(angle);
+    
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = r.color;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Score label
+    if (val > 0) {
+      ctx.fillStyle = r.color;
+      ctx.font = 'bold 11px "Noto Sans KR"';
+      ctx.textAlign = 'center';
+      ctx.fillText(val.toFixed(1), x, y - 12);
+    }
+  });
+}
+
+function resetAll() {
+  if (!confirm('모든 응답을 초기화하시겠습니까?')) return;
+  Object.keys(scores).forEach(k => delete scores[k]);
+  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  updateProgress();
+  switchTab('assess');
+}
+
+// ── Init ──
+buildAssessment();
+</script>
+</body>
+</html>
